@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.IOException;
 
 public class GenericRecordExample {
+
+    public static final String SRC_MAIN_RESOURCES_GENERATED = "src/main/resources/generated/customer-generic.avro";
+
     public static void main(String[] args) {
         // Step 0: Define schema
         Schema.Parser parser = new Schema.Parser();
@@ -44,7 +47,7 @@ public class GenericRecordExample {
         // Step 2: Write that generic record in a file - Serialization
         final DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<>(schema);
         try (DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter)) {
-            dataFileWriter.create(genericRecord.getSchema(), new File("src/main/resources/customer-generic.avro"));
+            dataFileWriter.create(genericRecord.getSchema(), new File(SRC_MAIN_RESOURCES_GENERATED));
             dataFileWriter.append(genericRecord);
             System.out.println("Written customer-generic.avro");
         } catch (IOException e) {
@@ -53,7 +56,7 @@ public class GenericRecordExample {
         }
 
         // Step 3: Read the generic record from a file - Deserialization
-        final File file = new File("src/main/resources/customer-generic.avro");
+        final File file = new File(SRC_MAIN_RESOURCES_GENERATED);
         final DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
         try (DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(file, datumReader)) {
             while (dataFileReader.hasNext()) {
