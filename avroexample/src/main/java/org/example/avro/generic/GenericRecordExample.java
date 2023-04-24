@@ -1,11 +1,10 @@
 package org.example.avro.generic;
 
 import org.apache.avro.Schema;
+import org.apache.avro.file.DataFileReader;
 import org.apache.avro.file.DataFileWriter;
-import org.apache.avro.generic.GenericData;
-import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.generic.GenericRecordBuilder;
+import org.apache.avro.generic.*;
+import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
 
 import java.io.File;
@@ -43,18 +42,30 @@ public class GenericRecordExample {
         System.out.println(genericRecord);
 
         // Step 2: Write that generic record in a file - Serialization
-        // writing to a file
         final DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<>(schema);
         try (DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter)) {
-            dataFileWriter.create(genericRecord.getSchema(), new File("customer-generic.avro"));
+            dataFileWriter.create(genericRecord.getSchema(), new File("src/main/resources/customer-generic.avro"));
             dataFileWriter.append(genericRecord);
             System.out.println("Written customer-generic.avro");
         } catch (IOException e) {
             System.out.println("Couldn't write file");
             e.printStackTrace();
         }
-        // Step 3: Read the generic record from a file - Deserialization
-        // Step 4: Interpret as generic record
 
+        // Step 3: Read the generic record from a file - Deserialization
+        final File file = new File("src/main/resources/customer-generic.avro");
+        final DatumReader<GenericRecord> datumReader = new GenericDatumReader<>();
+        try (DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(file, datumReader)) {
+            while (dataFileReader.hasNext()) {
+                GenericRecord customerRead = dataFileReader.next();
+                System.out.println("Successfully read avro file");
+                System.out.println(customerRead.toString());
+
+                // Step 4: Interpret as generic record
+                System.out.println("First name: " + customerRead.get("first_name"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
