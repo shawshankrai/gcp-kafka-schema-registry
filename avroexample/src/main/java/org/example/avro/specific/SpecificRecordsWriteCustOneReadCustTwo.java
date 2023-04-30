@@ -1,6 +1,5 @@
 package org.example.avro.specific;
 
-import com.example.Customer;
 import com.example.CustomerV1;
 import com.example.CustomerV2;
 import org.apache.avro.file.DataFileReader;
