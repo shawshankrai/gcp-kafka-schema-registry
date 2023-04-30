@@ -12,6 +12,7 @@ import org.apache.avro.specific.SpecificDatumWriter;
 import java.io.File;
 import java.io.IOException;
 
+// Forward Compatibility Schema V1 reading V2 Data
 public class SpecificRecordsWriteCustTwoReadCustOne {
     private static final String SRC_MAIN_RESOURCES_GENERATED = "src/main/resources/generated/v2/customer-specific.avro";
 
