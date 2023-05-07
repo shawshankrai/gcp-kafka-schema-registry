@@ -7,7 +7,6 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
-import static org.example.Constant.SCHEMA_REGISTRY_URL;
 import static org.example.Constant.SCHEMA_REGISTRY_URL_KEY;
 
 /**
@@ -28,7 +27,7 @@ public class KafkaAvroProducerV1 {
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
         properties.setProperty(SCHEMA_REGISTRY_URL_KEY, Constant.SCHEMA_REGISTRY_URL);
 
-        try (KafkaProducer<String, CustomerV1> kafkaProducer = new KafkaProducer<>(properties);) {
+        try (KafkaProducer<String, CustomerV1> kafkaProducer = new KafkaProducer<>(properties)) {
             CustomerV1 customer = CustomerV1.newBuilder()
                     .setFirstName("Jon")
                     .setLastName("Doe")
@@ -37,18 +36,15 @@ public class KafkaAvroProducerV1 {
                     .setWeight(85.5f)
                     .build();
 
-            ProducerRecord<String, CustomerV1> producerRecord = new ProducerRecord<String, CustomerV1>(
+            ProducerRecord<String, CustomerV1> producerRecord = new ProducerRecord<>(
                     TOPIC, customer
             );
 
-            kafkaProducer.send(producerRecord, new Callback() {
-                @Override
-                public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                    if(e == null) {
-                        System.out.println(recordMetadata.toString());
-                    } else {
-                        System.out.println(recordMetadata.toString() +"-"+e);
-                    }
+            kafkaProducer.send(producerRecord, (recordMetadata, e) -> {
+                if(e == null) {
+                    System.out.println(recordMetadata.toString());
+                } else {
+                    System.out.println(recordMetadata.toString() +"-"+e);
                 }
             });
 
