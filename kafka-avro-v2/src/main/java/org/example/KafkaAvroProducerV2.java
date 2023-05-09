@@ -14,9 +14,7 @@ import static org.example.Constant.SCHEMA_REGISTRY_URL_KEY;
 /**
  * Hello world!
  */
-public class KafkaAvroProducerV1 {
-
-
+public class KafkaAvroProducerV2 {
     public static final String TOPIC = "customer-avro";
 
     public static void main(String[] args) {
@@ -31,11 +29,13 @@ public class KafkaAvroProducerV1 {
 
         try (KafkaProducer<String, Customer> kafkaProducer = new KafkaProducer<>(properties)) {
             Customer customer = Customer.newBuilder()
-                    .setFirstName("Jane")
+                    .setFirstName("Jon")
                     .setLastName("Doe")
                     .setAge(31)
                     .setHeight(180.0f)
                     .setWeight(85.5f)
+                    .setEmail("e@mail.com")
+                    .setPhoneNumber("phone-num-ber")
                     .build();
 
             ProducerRecord<String, Customer> producerRecord = new ProducerRecord<>(
@@ -43,10 +43,10 @@ public class KafkaAvroProducerV1 {
             );
 
             kafkaProducer.send(producerRecord, (recordMetadata, e) -> {
-                if(e == null) {
+                if (e == null) {
                     System.out.println(recordMetadata.toString());
                 } else {
-                    System.out.println(recordMetadata.toString() +"-"+e);
+                    System.out.println(recordMetadata.toString() + "-" + e);
                 }
             });
 

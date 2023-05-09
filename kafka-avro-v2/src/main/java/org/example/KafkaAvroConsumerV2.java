@@ -13,9 +13,9 @@ import java.util.Collections;
 import java.util.Properties;
 
 import static org.example.Constant.*;
-import static org.example.KafkaAvroProducerV1.TOPIC;
+import static org.example.KafkaAvroProducerV2.TOPIC;
 
-public class KafkaAvroConsumerV1 {
+public class KafkaAvroConsumerV2 {
 
     public static void main(String[] args) {
         Properties properties = new Properties();
